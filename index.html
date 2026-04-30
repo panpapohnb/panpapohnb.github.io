@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panpapohn | Professional Portfolio</title>
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <style>
+        body { font-family: 'Prompt', 'Inter', sans-serif; }
+        
+        /* Theme Colors */
+        :root {
+            --color-primary: #FBBF24;
+            --color-primary-hover: #F59E0B; 
+            --color-secondary: #C084FC; 
+            --color-accent: #FDA4AF; 
+            --color-bg-soft: #FFFBF5; 
+            --gradient-hero: linear-gradient(135deg, #FFF0E6 0%, #FFF5F7 50%, #E8F4F8 100%);
+            --gradient-contact: linear-gradient(180deg, #FFFFFF 0%, #FFF5F7 50%, #FFF0E6 100%);
+        }
+        
+        .text-theme-primary { color: #D97706; }
+        .bg-theme-primary { background-color: var(--color-primary); }
+        .bg-theme-soft { background-color: var(--color-bg-soft); }
+        .bg-gradient-hero { background: var(--gradient-hero); }
+        .bg-gradient-contact { background: var(--gradient-contact); }
+        
+        /* 1. Scroll Reveal Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 2. Floating Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        /* 3. Filter Animation */
+        .project-item {
+            transition: all 0.4s ease;
+        }
+        .project-item.hide {
+            display: none;
+        }
+
+        /* Fix Scroll Padding for sticky nav */
+        html { scroll-padding-top: 5rem; }
+    </style>
+</head>
+<body class="bg-white text-slate-800 antialiased selection:bg-amber-200 selection:text-slate-900">
+
+    <!-- Reading Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-1 z-[60] bg-transparent">
+        <div id="progress-bar" class="h-full bg-gradient-to-r from-amber-400 to-purple-400 w-0 transition-all duration-150"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white/80 backdrop-blur-lg border-b border-white/20 fixed w-full top-0 z-50 transition-all duration-300 shadow-sm" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                
+                <!-- Logo -->
+                <a href="#home" class="flex flex-col items-start group mt-1">
+                    <span class="text-2xl font-bold text-slate-900 tracking-tight leading-none mb-1 group-hover:text-amber-600 transition-colors">แฟ้มผลงาน</span>
+                    <div class="flex items-center gap-2">
+                        <div class="h-[2px] w-6 bg-amber-400 transition-all group-hover:w-8"></div>
+                        <span class="text-[11px] text-slate-400 uppercase tracking-widest font-medium">Portfolio</span>
+                        <div class="h-[2px] w-6 bg-purple-400 transition-all group-hover:w-8"></div>
+                    </div>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="text-sm font-medium text-slate-600 hover:text-amber-600 transition-colors">เกี่ยวกับฉัน</a>
+                    <a href="#journey" class="text-sm font-medium text-slate-600 hover:text-amber-600 transition-colors">ประวัติ & ประสบการณ์</a>
+                    <a href="#skills" class="text-sm font-medium text-slate-600 hover:text-amber-600 transition-colors">ทักษะความสามารถ</a>
+                    <a href="#projects" class="text-sm font-medium text-slate-600 hover:text-amber-600 transition-colors">ผลงาน</a>
+                </div>
+                
+                <div class="hidden md:flex items-center">
+                    <a href="#contact" class="text-slate-900 bg-theme-primary hover:bg-[#F59E0B] px-7 py-2.5 rounded-full text-sm font-bold transition-transform hover:scale-105 shadow-md shadow-amber-500/20">Get Started</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-amber-600 focus:outline-none p-2 rounded-full hover:bg-amber-50 transition-colors">
+                        <i data-feather="menu"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-slate-100 shadow-xl absolute w-full transition-all">
+            <div class="px-4 py-4 space-y-2">
+                <a href="#about" class="block px-4 py-3 rounded-2xl text-base font-medium text-slate-700 hover:bg-amber-50 hover:text-amber-600 transition-colors">เกี่ยวกับฉัน</a>
+                <a href="#journey" class="block px-4 py-3 rounded-2xl text-base font-medium text-slate-700 hover:bg-amber-50 hover:text-amber-600 transition-colors">ประวัติ & ประสบการณ์</a>
+                <a href="#skills" class="block px-4 py-3 rounded-2xl text-base font-medium text-slate-700 hover:bg-amber-50 hover:text-amber-600 transition-colors">ทักษะความสามารถ</a>
+                <a href="#projects" class="block px-4 py-3 rounded-2xl text-base font-medium text-slate-700 hover:bg-amber-50 hover:text-amber-600 transition-colors">ผลงาน</a>
+                <a href="#contact" class="block px-4 py-3 mt-4 rounded-2xl text-base font-bold text-slate-900 bg-theme-primary text-center transition-colors shadow-md shadow-amber-500/20">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-28 pb-10 lg:pt-32 lg:pb-12 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-hero rounded-[2.5rem] lg:rounded-[3.5rem] relative flex flex-col md:flex-row items-center pt-12 md:pt-20 px-8 md:px-16 min-h-[520px]">
+                <!-- Text Content -->
+                <div class="w-full lg:w-1/2 z-10 relative text-center lg:text-left mb-16 lg:mb-0 pb-10 lg:pb-0 reveal">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-sm text-amber-600 text-xs font-bold uppercase tracking-widest mb-6 shadow-sm border border-white">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                        Portfolio by Panpapohn Buppasiri
+                    </div>
+                    <h1 class="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold text-slate-900 leading-[1.15] tracking-tight mb-4">
+                        พรรณปพร<br>
+                        <span class="text-slate-800">บุพศิริ</span>
+                    </h1>
+                    <p class="text-slate-600 text-lg max-w-lg mx-auto lg:mx-0 mb-10 font-medium">
+                        ยินดีต้อนรับสู่พอร์ตโฟลิโอของฉัน พื้นที่รวบรวมผลงาน ประสบการณ์ และความมุ่งมั่นในการสร้างสรรค์สื่อมัลติมีเดียและระบบสารสนเทศ
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
+                        <a href="#projects" class="px-8 py-4 bg-theme-primary text-slate-900 rounded-full font-bold hover:bg-[#F59E0B] transition-all shadow-lg shadow-amber-400/40 flex items-center justify-center gap-2 hover:-translate-y-1">
+                            Get Started
+                        </a>
+                        <a href="#contact" class="px-8 py-4 bg-white/80 backdrop-blur-sm text-slate-700 rounded-full font-bold hover:bg-white transition-all shadow-sm border border-white flex items-center justify-center gap-2 hover:-translate-y-1">
+                            ติดต่อฉัน
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Profile Image with Floating Effect -->
+                <div class="w-full lg:w-1/2 flex justify-center lg:justify-end lg:absolute lg:right-12 lg:bottom-0 z-0 reveal delay-200">
+                    <div class="relative w-[300px] h-[380px] sm:w-[380px] sm:h-[450px] lg:w-[480px] lg:h-[550px] flex items-end justify-center animate-float">
+                        <div class="absolute bottom-0 w-[85%] h-[80%] bg-white/70 backdrop-blur-md rounded-t-full shadow-2xl shadow-purple-900/10 border-4 border-white transition-all"></div>
+                        
+                        <img src="https://arit.rmutto.ac.th/wp-content/uploads/2026/04/%E0%B8%94%E0%B8%B5%E0%B9%84%E0%B8%8B%E0%B8%99%E0%B9%8C%E0%B8%97%E0%B8%B5%E0%B9%88%E0%B8%A2%E0%B8%B1%E0%B8%87%E0%B9%84%E0%B8%A1%E0%B9%88%E0%B9%84%E0%B8%94%E0%B9%89%E0%B8%95%E0%B8%B1%E0%B9%89%E0%B8%87%E0%B8%8A%E0%B8%B7%E0%B9%88%E0%B8%AD-8-768x1024.png" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                             alt="Panpapohn Profile" 
+                             class="relative z-10 w-[95%] h-[105%] object-contain object-bottom drop-shadow-2xl transition-transform hover:scale-105 duration-500 cursor-pointer">
+                             
+                        <div class="hidden relative z-10 w-[80%] h-[75%] flex-col items-center justify-center text-amber-500 bg-amber-50/90 backdrop-blur-sm rounded-t-[10rem] border-2 border-dashed border-amber-300 text-center p-4 mb-4">
+                            <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span class="text-sm font-bold">ลิงก์รูปภาพไม่แสดงผล<br>โปรดใส่ลิงก์ภาพใหม่ (.PNG)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absolute top-12 right-1/4 w-8 h-8 rounded-[10px] rotate-12 bg-rose-300 opacity-60 animate-bounce"></div>
+                <div class="absolute bottom-24 left-12 w-6 h-6 rounded-full bg-purple-300 opacity-60 animate-pulse"></div>
+                <div class="absolute top-1/3 left-1/2 w-4 h-4 rounded-full bg-amber-300 opacity-80"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-3 gap-12 items-start">
+                <div class="lg:col-span-1 reveal text-center lg:text-left">
+                    <span class="text-slate-400 font-bold tracking-widest text-xs uppercase mb-2 inline-block">About Me</span>
+                    <h2 class="text-4xl font-bold text-slate-900 mb-4">ประวัติส่วนตัว</h2>
+                    <div class="w-12 h-1.5 bg-theme-primary rounded-full mx-auto lg:mx-0"></div>
+                </div>
+                
+                <div class="lg:col-span-2 bg-theme-soft p-8 sm:p-10 rounded-[2.5rem] shadow-sm hover:shadow-xl hover:shadow-amber-100/50 transition-all duration-500 reveal delay-100 border border-amber-50/50">
+                    <div class="text-center md:text-left mb-8 border-b border-amber-100 pb-8">
+                        <h3 class="text-3xl font-extrabold text-slate-900 mb-2">นางสาวพรรณปพร บุพศิริ</h3>
+                        <p class="text-slate-500 uppercase tracking-widest font-medium text-sm">Panpapohn Buppasiri</p>
+                    </div>
+                    
+                    <div class="grid sm:grid-cols-2 gap-10">
+                        <div>
+                            <h4 class="inline-flex items-center gap-2 px-5 py-2 bg-white text-slate-800 font-bold rounded-full text-sm mb-6 shadow-sm border border-slate-100">
+                                <span class="w-2 h-2 rounded-full bg-amber-400"></span> ข้อมูลทั่วไป
+                            </h4>
+                            <ul class="space-y-4 text-slate-600">
+                                <li class="flex items-start gap-2"><span class="font-bold text-slate-800 min-w-[70px]">ชื่อเล่น :</span> เกว <span class="mx-2 text-slate-300">|</span> <span class="font-bold text-slate-800">อายุ :</span> 29 ปี</li>
+                                <li class="flex items-start gap-2"><span class="font-bold text-slate-800 min-w-[70px]">วันเกิด :</span> 26 มกราคม 2540</li>
+                                <li class="flex items-start gap-2"><span class="font-bold text-slate-800 min-w-[70px]">เชื้อชาติ :</span> ไทย <span class="mx-2 text-slate-300">|</span> <span class="font-bold text-slate-800">ศาสนา :</span> พุทธ</li>
+                                <li class="flex items-start gap-2 pt-1"><span class="font-bold text-slate-800 min-w-[85px]">ที่อยู่ปัจจุบัน :</span> <span>130/28 หมู่ที่ 9 ตำบลทุ่งสุขลา<br>อำเภอศรีราชา จังหวัดชลบุรี</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="inline-flex items-center gap-2 px-5 py-2 bg-white text-slate-800 font-bold rounded-full text-sm mb-6 shadow-sm border border-slate-100">
+                                <span class="w-2 h-2 rounded-full bg-purple-400"></span> ข้อมูลติดต่อ
+                            </h4>
+                            <ul class="space-y-4 text-slate-600">
+                                <a href="tel:0927451997" class="flex items-center gap-4 bg-white p-3 rounded-2xl shadow-sm border border-slate-100 hover:border-amber-200 transition-all group">
+                                    <div class="w-10 h-10 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                                        <i data-feather="phone" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="font-medium text-lg text-slate-800">092-7451997</span>
+                                </a>
+                                <a href="mailto:panpaohnb@gmail.com" class="flex items-center gap-4 bg-white p-3 rounded-2xl shadow-sm border border-slate-100 hover:border-amber-200 transition-all group">
+                                    <div class="w-10 h-10 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                                        <i data-feather="mail" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="font-medium text-slate-800 break-all">panpapohnb@gmail.com</span>
+                                </a>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience & Education Section -->
+    <section id="journey" class="py-20 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-slate-400 font-bold tracking-widest text-xs uppercase mb-2 inline-block">My Journey</span>
+                <h2 class="text-4xl font-bold text-slate-900 mb-4">ประวัติและประสบการณ์</h2>
+                <div class="w-12 h-1.5 bg-theme-primary rounded-full mx-auto"></div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-16">
+                <!-- Column 1: Experience -->
+                <div class="reveal delay-100">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
+                            <i data-feather="briefcase" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900">ประสบการณ์ทำงาน</h3>
+                    </div>
+                    
+                    <div class="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:h-full before:w-[2px] before:bg-amber-100">
+                        <!-- Exp Item -->
+                        <div class="relative flex items-start gap-6 group">
+                            <div class="w-3 h-3 mt-8 rounded-full border-[3px] border-amber-400 bg-white z-10 ml-[15px] group-hover:scale-150 transition-transform"></div>
+                            <div class="flex-1 bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-lg hover:border-amber-200 transition-all">
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="text-xs font-bold text-amber-700 bg-amber-100 px-3 py-1 rounded-full">ปัจจุบัน</span>
+                                </div>
+                                <h4 class="font-bold text-slate-900 text-xl mb-1">นักปฏิบัติการอุดมศึกษา</h4>
+                                <p class="text-sm font-medium text-slate-500 mb-3">งานหอสมุดกลาง เขตพื้นที่บางพระ (ส่วนกลาง)</p>
+                                <p class="text-slate-600 text-sm leading-relaxed">ปฏิบัติงานสนับสนุนการให้บริการทรัพยากรสารสนเทศ ประยุกต์ใช้ทักษะด้านการออกแบบสื่อมัลติมีเดีย (กราฟิก/วิดีโอ) และดูแลเว็บไซต์ เพื่อส่งเสริมงานบริการ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 2: Education -->
+                <div class="reveal delay-200">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
+                            <i data-feather="book-open" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900">ประวัติการศึกษา</h3>
+                    </div>
+
+                    <div class="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:h-full before:w-[2px] before:bg-purple-100">
+                        <!-- Edu Item 1 (ปริญญาตรี) -->
+                        <div class="relative flex items-start gap-4 sm:gap-6 group">
+                            <div class="w-3 h-3 mt-[3.25rem] rounded-full border-[3px] border-purple-400 bg-white z-10 ml-[15px] group-hover:scale-150 transition-transform"></div>
+                            <div class="flex-1 bg-white p-5 sm:p-6 rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-lg hover:border-purple-200 transition-all flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
+                                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex-shrink-0 bg-white flex items-center justify-center overflow-hidden border border-slate-100 shadow-sm group-hover:scale-105 transition-transform">
+                                    <img src="https://www.buu.ac.th/wp-content/uploads/elementor/thumbs/Image-34@2x-q6om8nd4a2wra18ljry0vo6jrzxuk1rmk1n9f696ok.png" alt="Burapha University" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                                        <span class="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">ระดับปริญญาตรี</span>
+                                        <span class="text-xs font-semibold text-slate-400">ปีการศึกษา 25xx - 25xx</span>
+                                    </div>
+                                    <h4 class="font-bold text-slate-900 text-lg leading-tight mb-1">ศิลปศาสตรบัณฑิต สาขาสารสนเทศศึกษา</h4>
+                                    <p class="text-sm font-bold text-amber-500 mb-1">เกียรตินิยมอันดับ 1</p>
+                                    <p class="text-slate-600 text-sm">คณะมนุษยศาสตร์และสังคมศาสตร์ มหาวิทยาลัยบูรพา</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Edu Item 2 (มัธยมศึกษาตอนปลาย) -->
+                        <div class="relative flex items-start gap-4 sm:gap-6 group">
+                            <div class="w-3 h-3 mt-[2.5rem] rounded-full border-[3px] border-purple-400 bg-white z-10 ml-[15px] group-hover:scale-150 transition-transform"></div>
+                            <div class="flex-1 bg-white p-5 sm:p-6 rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-lg hover:border-purple-200 transition-all flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
+                                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex-shrink-0 bg-white flex items-center justify-center overflow-hidden border border-slate-100 shadow-sm group-hover:scale-105 transition-transform">
+                                    <img src="https://scontent-bkk1-1.xx.fbcdn.net/v/t39.30808-1/308872146_470417535109596_6959073905176962989_n.png?stp=dst-png_s200x200&_nc_cat=101&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=xHjkVpcPapYQ7kNvwGyu87A&_nc_oc=Adr0p1uZKZmP_XWrTNOFpix7bNeZ_anTS_6XJXLTq1JMEPg0GHvUvVTmHvgAe50hcs4&_nc_zt=24&_nc_ht=scontent-bkk1-1.xx&_nc_gid=ljb01I98ntvOAPd3HSPxxQ&_nc_ss=7a289&oh=00_Af1rKscNMo9K8K9ovqThJOWEjxywvxjQHWjKZKtKQDFH9A&oe=69F510E7" alt="Sriracha School" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                                        <span class="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">ระดับมัธยมศึกษาตอนปลาย</span>
+                                        <span class="text-xs font-semibold text-slate-400">ปีการศึกษา 25xx - 25xx</span>
+                                    </div>
+                                    <p class="text-slate-700 font-medium">โรงเรียนศรีราชา อำเภอศรีราชา จังหวัดชลบุรี</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Edu Item 3 (มัธยมศึกษาตอนต้น) -->
+                        <div class="relative flex items-start gap-4 sm:gap-6 group">
+                            <div class="w-3 h-3 mt-[2.5rem] rounded-full border-[3px] border-purple-400 bg-white z-10 ml-[15px] group-hover:scale-150 transition-transform"></div>
+                            <div class="flex-1 bg-white p-5 sm:p-6 rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-lg hover:border-purple-200 transition-all flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
+                                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex-shrink-0 bg-white flex items-center justify-center overflow-hidden border border-slate-100 shadow-sm group-hover:scale-105 transition-transform">
+                                    <img src="https://scontent-bkk1-1.xx.fbcdn.net/v/t39.30808-1/308872146_470417535109596_6959073905176962989_n.png?stp=dst-png_s200x200&_nc_cat=101&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=xHjkVpcPapYQ7kNvwGyu87A&_nc_oc=Adr0p1uZKZmP_XWrTNOFpix7bNeZ_anTS_6XJXLTq1JMEPg0GHvUvVTmHvgAe50hcs4&_nc_zt=24&_nc_ht=scontent-bkk1-1.xx&_nc_gid=ljb01I98ntvOAPd3HSPxxQ&_nc_ss=7a289&oh=00_Af1rKscNMo9K8K9ovqThJOWEjxywvxjQHWjKZKtKQDFH9A&oe=69F510E7" alt="Sriracha School" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                                        <span class="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">ระดับมัธยมศึกษาตอนต้น</span>
+                                        <span class="text-xs font-semibold text-slate-400">ปีการศึกษา 25xx - 25xx</span>
+                                    </div>
+                                    <p class="text-slate-700 font-medium">โรงเรียนศรีราชา อำเภอศรีราชา จังหวัดชลบุรี</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-slate-400 font-bold tracking-widest text-xs uppercase mb-2 inline-block">What we do</span>
+                <h2 class="text-4xl font-bold text-slate-900 mb-4">Our Skills</h2>
+                <div class="w-12 h-1.5 bg-theme-primary rounded-full mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 items-stretch mb-16 reveal delay-100">
+                <!-- Skill Card 1 -->
+                <div class="bg-[#FFF0EB] p-8 lg:p-10 rounded-[2rem] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-white text-orange-400 flex items-center justify-center shadow-sm">
+                            <i data-feather="pen-tool"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900">Graphic Design</h3>
+                    </div>
+                    <p class="text-slate-600 font-medium leading-relaxed">
+                        การออกแบบสื่อ สิ่งพิมพ์ และมัลติมีเดียที่ดึงดูดสายตาและสื่อสารแบรนด์ได้อย่างมีประสิทธิภาพ
+                    </p>
+                </div>
+                
+                <!-- Skill Card 2 -->
+                <div class="bg-[#F3E8FF] p-8 lg:p-10 rounded-[2rem] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-white text-purple-500 flex items-center justify-center shadow-sm">
+                            <i data-feather="video"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900">Video Editing</h3>
+                    </div>
+                    <p class="text-slate-600 font-medium leading-relaxed">
+                        การตัดต่อวิดีทัศน์ เล่าเรื่องราวให้น่าสนใจ และตัดแต่งเสียงเพื่อสร้างอารมณ์ร่วม
+                    </p>
+                </div>
+
+                <!-- Skill Card 3 -->
+                <div class="bg-[#FEF3C7] p-8 lg:p-10 rounded-[2rem] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-white text-amber-500 flex items-center justify-center shadow-sm">
+                            <i data-feather="layout"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900">Web Design</h3>
+                    </div>
+                    <p class="text-slate-600 font-medium leading-relaxed">
+                        การสร้างและดูแลเว็บไซต์ที่ใช้งานง่าย มีความสวยงาม และตอบสนองต่อผู้ใช้งานทุกอุปกรณ์
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Software Icons -->
+            <div class="reveal delay-200 text-center">
+                <div class="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
+                    <!-- Canva -->
+                    <div class="group relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center hover:scale-110 transition-all cursor-help" title="Canva">
+                        <img src="https://static.canva.com/web/images/8439b51bb7a19f6e65ce1064bc37c197.svg" alt="Canva" class="w-full h-full object-contain drop-shadow-md">
+                    </div>
+                    
+                    <!-- Photoshop -->
+                    <div class="group relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center hover:scale-110 transition-all cursor-help" title="Adobe Photoshop">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Adobe_Photoshop_CC_icon.svg/1280px-Adobe_Photoshop_CC_icon.svg.png?_=20200616073617" alt="Adobe Photoshop" class="w-full h-full object-contain drop-shadow-md">
+                    </div>
+                    
+                    <!-- CapCut -->
+                    <div class="group relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center hover:scale-110 transition-all cursor-help" title="CapCut">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/CapCut_logo.svg/1920px-CapCut_logo.svg.png?_=20260111192302" alt="CapCut" class="w-full h-full object-contain rounded-[1rem] sm:rounded-[1.5rem] drop-shadow-md">
+                    </div>
+                    
+                    <!-- WordPress -->
+                    <div class="group relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center hover:scale-110 transition-all cursor-help" title="WordPress">
+                        <img src="https://logos-world.net/wp-content/uploads/2020/10/WordPress-Logo.png" alt="WordPress" class="w-full h-full object-contain drop-shadow-md">
+                    </div>
+                    
+                    <!-- Word -->
+                    <div class="group relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center hover:scale-110 transition-all cursor-help" title="Microsoft Word">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Microsoft_Office_Word_%282025%E2%80%93present%29.svg/960px-Microsoft_Office_Word_%282025%E2%80%93present%29.svg.png" alt="Microsoft Word" class="w-full h-full object-contain drop-shadow-md">
+                    </div>
+                    
+                    <!-- Excel -->
+                    <div class="group relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center hover:scale-110 transition-all cursor-help" title="Microsoft Excel">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Microsoft_Office_Excel_%282019%E2%80%932025%29.svg/1280px-Microsoft_Office_Excel_%282019%E2%80%932025%29.svg.png" alt="Microsoft Excel" class="w-full h-full object-contain drop-shadow-md">
+                    </div>
+                    
+                    <!-- PowerPoint -->
+                    <div class="group relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center hover:scale-110 transition-all cursor-help" title="Microsoft PowerPoint">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Microsoft_Office_PowerPoint_%282025%E2%80%93present%29.svg/960px-Microsoft_Office_PowerPoint_%282025%E2%80%93present%29.svg.png?_=20251003201545" alt="Microsoft PowerPoint" class="w-full h-full object-contain drop-shadow-md">
+                    </div>
+
+                    <!-- Google Apps Script -->
+                    <div class="group relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center hover:scale-110 transition-all cursor-help" title="Google Apps Script">
+                        <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*tL6Q5r60E2hEDx9kuisHAA.png" alt="Google Apps Script" class="w-full h-full object-contain drop-shadow-md p-1 sm:p-2">
+                    </div>
+
+                    <!-- AI Tools (Gemini) -->
+                    <div class="group relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center hover:scale-110 transition-all cursor-help" title="AI Tools">
+                        <img src="https://static.vecteezy.com/system/resources/previews/075/845/949/non_2x/ai-tools-logo-with-ai-and-ai-tools-free-vector.jpg" alt="AI Tools" class="w-[85%] h-[85%] object-contain drop-shadow-md">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Projects Section -->
+    <section id="projects" class="py-24 bg-[#FAFAFA]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <span class="text-slate-400 font-bold tracking-widest text-xs uppercase mb-2 inline-block">Recent Work</span>
+                <h2 class="text-4xl font-black text-slate-900 mb-4">ผลงาน</h2>
+                <div class="w-12 h-1.5 bg-theme-primary rounded-full mx-auto mb-10"></div>
+                
+                <!-- Dynamic Category Filters -->
+                <div class="flex flex-wrap justify-center gap-3 sm:gap-4" id="filter-buttons">
+                    <button class="filter-btn active px-6 py-2.5 rounded-full bg-theme-primary text-slate-900 transition-all text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5" data-filter="all">View All Projects</button>
+                    <button class="filter-btn px-6 py-2.5 rounded-full border border-slate-200 text-slate-600 bg-white hover:border-amber-400 hover:text-slate-900 transition-all text-sm font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5" data-filter="design">ด้านการออกแบบ</button>
+                    <button class="filter-btn px-6 py-2.5 rounded-full border border-slate-200 text-slate-600 bg-white hover:border-amber-400 hover:text-slate-900 transition-all text-sm font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5" data-filter="video">ด้านจัดทำวิดีโอ</button>
+                    <button class="filter-btn px-6 py-2.5 rounded-full border border-slate-200 text-slate-600 bg-white hover:border-amber-400 hover:text-slate-900 transition-all text-sm font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5" data-filter="speak">ด้านวิทยากร</button>
+                    <button class="filter-btn px-6 py-2.5 rounded-full border border-slate-200 text-slate-600 bg-white hover:border-amber-400 hover:text-slate-900 transition-all text-sm font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5" data-filter="event">ด้านจัดกิจกรรม</button>
+                </div>
+            </div>
+
+            <!-- Masonry Grid Gallery (สลับแนวตั้ง แนวนอน ให้ดู Wow) -->
+            <div class="columns-1 md:columns-2 gap-6 lg:gap-8 space-y-6 lg:space-y-8 reveal delay-100 mt-10" id="project-gallery">
+                
+                <!-- Video Item 1 (Cover Image แทน iframe) -->
+                <!-- ให้ใส่ ID ของ YouTube วิดีโอใน src ของ img (ตรงกลาง) และ data-video สำหรับให้ Lightbox รู้ว่าต้องเล่นคลิปไหน -->
+                <div class="project-item break-inside-avoid relative rounded-[2rem] overflow-hidden cursor-pointer border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 hover:shadow-amber-500/20 transition-all duration-500 bg-white p-2 group" data-category="video" data-video="https://youtu.be/pCsp-VwyqSQ?si=GBvZ00vH8ujgTERT">
+                    <div class="relative w-full aspect-video rounded-[1.5rem] overflow-hidden bg-slate-900">
+                        <!-- ภาพปก YouTube -->
+                        <img src="https://img.youtube.com/vi/pCsp-VwyqSQ/maxresdefault.jpg" alt="วิดีโอแนะนำการสืบค้น" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                        
+                        <!-- ไอคอน Play ตรงกลาง -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none transition-transform duration-500 group-hover:scale-110">
+                            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-theme-primary/90 backdrop-blur-sm text-white rounded-full flex items-center justify-center shadow-lg shadow-amber-500/50">
+                                <i data-feather="play" class="w-8 h-8 sm:w-10 sm:h-10 ml-1"></i>
+                            </div>
+                        </div>
+
+                        <!-- แถบข้อความด้านล่าง -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6 sm:p-8">
+                            <div class="transform -translate-y-8 group-hover:translate-y-0 transition-transform duration-500 flex justify-end">
+                                <span class="bg-white/90 backdrop-blur text-slate-800 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">ด้านจัดทำวิดีโอ</span>
+                            </div>
+                            <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                                <h3 class="text-white font-bold text-xl mb-3">แนะนำการสืบค้นข้อมูล</h3>
+                                <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-theme-primary text-slate-900 rounded-full font-bold text-sm shadow-xl">
+                                    <i data-feather="play-circle" class="w-4 h-4"></i> เล่นวิดีโอ
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Design Item 1 (Portrait) -->
+                <div class="project-item break-inside-avoid group relative rounded-[2rem] overflow-hidden cursor-pointer border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 hover:shadow-amber-500/20 transition-all duration-500 bg-white p-2" data-category="design">
+                    <div class="relative w-full aspect-[3/4] rounded-[1.5rem] overflow-hidden bg-slate-100">
+                        <img src="https://i.postimg.cc/C5MLX3SG/2026-training-(1).png" alt="โปสเตอร์ 1" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6 sm:p-8">
+                            <div class="transform -translate-y-8 group-hover:translate-y-0 transition-transform duration-500 flex justify-end">
+                                <span class="bg-white/90 backdrop-blur text-slate-800 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">ด้านการออกแบบ</span>
+                            </div>
+                            <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                                <h3 class="text-white font-bold text-xl mb-3">โปสเตอร์ Training</h3>
+                                <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-theme-primary text-slate-900 rounded-full font-bold text-sm shadow-xl">
+                                    <i data-feather="zoom-in" class="w-4 h-4"></i> ขยายดูรูปภาพ
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Item 1 (Horizontal) -->
+                <div class="project-item break-inside-avoid group relative rounded-[2rem] overflow-hidden cursor-pointer border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 hover:shadow-amber-500/20 transition-all duration-500 bg-white p-2" data-category="event">
+                    <div class="relative w-full aspect-[4/3] rounded-[1.5rem] overflow-hidden bg-slate-100">
+                        <img src="https://i.postimg.cc/xdJBttmX/wa-len-thin.jpg" alt="ภาพงานกิจกรรม" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-1">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6 sm:p-8">
+                            <div class="transform -translate-y-8 group-hover:translate-y-0 transition-transform duration-500 flex justify-end">
+                                <span class="bg-white/90 backdrop-blur text-slate-800 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">ด้านจัดกิจกรรม</span>
+                            </div>
+                            <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                                <h3 class="text-white font-bold text-xl mb-3">งานวันวาเลนไทน์</h3>
+                                <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-theme-primary text-slate-900 rounded-full font-bold text-sm shadow-xl">
+                                    <i data-feather="zoom-in" class="w-4 h-4"></i> ขยายดูรูปภาพ
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Speaker Item 1 (Square) -->
+                <div class="project-item break-inside-avoid group relative rounded-[2rem] overflow-hidden cursor-pointer border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 hover:shadow-amber-500/20 transition-all duration-500 bg-white p-2" data-category="speak">
+                    <div class="relative w-full aspect-square rounded-[1.5rem] overflow-hidden bg-slate-100">
+                        <img src="https://i.postimg.cc/B6NbNSH8/naeana-ka-rs-bkh-n-than-kh-xm-lx-le-k-thrx-n-ks.jpg" alt="ภาพงานวิทยากร" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6 sm:p-8">
+                            <div class="transform -translate-y-8 group-hover:translate-y-0 transition-transform duration-500 flex justify-end">
+                                <span class="bg-white/90 backdrop-blur text-slate-800 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">ด้านวิทยากร</span>
+                            </div>
+                            <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                                <h3 class="text-white font-bold text-xl mb-3">การอบรมอิเล็กทรอนิกส์</h3>
+                                <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-theme-primary text-slate-900 rounded-full font-bold text-sm shadow-xl">
+                                    <i data-feather="zoom-in" class="w-4 h-4"></i> ขยายดูรูปภาพ
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Design Item 2 (Vertical Portrait) -->
+                <div class="project-item break-inside-avoid group relative rounded-[2rem] overflow-hidden cursor-pointer border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 hover:shadow-amber-500/20 transition-all duration-500 bg-white p-2" data-category="design">
+                    <div class="relative w-full aspect-[4/5] rounded-[1.5rem] overflow-hidden bg-slate-100">
+                        <img src="https://i.postimg.cc/2yfrNPYW/poster.png" alt="กราฟิก Social" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-1">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6 sm:p-8">
+                            <div class="transform -translate-y-8 group-hover:translate-y-0 transition-transform duration-500 flex justify-end">
+                                <span class="bg-white/90 backdrop-blur text-slate-800 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">ด้านการออกแบบ</span>
+                            </div>
+                            <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                                <h3 class="text-white font-bold text-xl mb-3">แบนเนอร์ออนไลน์</h3>
+                                <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-theme-primary text-slate-900 rounded-full font-bold text-sm shadow-xl">
+                                    <i data-feather="zoom-in" class="w-4 h-4"></i> ขยายดูรูปภาพ
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Item 2 (Cover Image แทน iframe) -->
+                <div class="project-item break-inside-avoid relative rounded-[2rem] overflow-hidden cursor-pointer border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 hover:shadow-amber-500/20 transition-all duration-500 bg-white p-2 group" data-category="video" data-video="https://youtu.be/BJ9uV6LW2s0?si=_ZkDgspeX6Yc80T3">
+                    <div class="relative w-full aspect-video rounded-[1.5rem] overflow-hidden bg-slate-900">
+                        <img src="https://img.youtube.com/vi/BJ9uV6LW2s0/maxresdefault.jpg" alt="วิดีโอผลงาน" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                        
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none transition-transform duration-500 group-hover:scale-110">
+                            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-theme-primary/90 backdrop-blur-sm text-white rounded-full flex items-center justify-center shadow-lg shadow-amber-500/50">
+                                <i data-feather="play" class="w-8 h-8 sm:w-10 sm:h-10 ml-1"></i>
+                            </div>
+                        </div>
+
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6 sm:p-8">
+                            <div class="transform -translate-y-8 group-hover:translate-y-0 transition-transform duration-500 flex justify-end">
+                                <span class="bg-white/90 backdrop-blur text-slate-800 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">ด้านจัดทำวิดีโอ</span>
+                            </div>
+                            <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                                <h3 class="text-white font-bold text-xl mb-3">วิดีโอพรีเซนต์</h3>
+                                <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-theme-primary text-slate-900 rounded-full font-bold text-sm shadow-xl">
+                                    <i data-feather="play-circle" class="w-4 h-4"></i> เล่นวิดีโอ
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Item 2 (Vertical Portrait) -->
+                <div class="project-item break-inside-avoid group relative rounded-[2rem] overflow-hidden cursor-pointer border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 hover:shadow-amber-500/20 transition-all duration-500 bg-white p-2" data-category="event">
+                    <div class="relative w-full aspect-[3/4] rounded-[1.5rem] overflow-hidden bg-slate-100">
+                        <img src="https://i.postimg.cc/rwXvQvcW/ha-low-n.jpg" alt="ภาพงานกิจกรรม" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6 sm:p-8">
+                            <div class="transform -translate-y-8 group-hover:translate-y-0 transition-transform duration-500 flex justify-end">
+                                <span class="bg-white/90 backdrop-blur text-slate-800 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">ด้านจัดกิจกรรม</span>
+                            </div>
+                            <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                                <h3 class="text-white font-bold text-xl mb-3">กิจกรรมฮาโลวีน</h3>
+                                <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-theme-primary text-slate-900 rounded-full font-bold text-sm shadow-xl">
+                                    <i data-feather="zoom-in" class="w-4 h-4"></i> ขยายดูรูปภาพ
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Speaker Item 2 (Landscape) -->
+                <div class="project-item break-inside-avoid group relative rounded-[2rem] overflow-hidden cursor-pointer border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 hover:shadow-amber-500/20 transition-all duration-500 bg-white p-2" data-category="speak">
+                    <div class="relative w-full aspect-video rounded-[1.5rem] overflow-hidden bg-slate-100">
+                        <img src="https://i.postimg.cc/8kypXknQ/fil-009.png" alt="ภาพงานวิทยากร" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-1">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6 sm:p-8">
+                            <div class="transform -translate-y-8 group-hover:translate-y-0 transition-transform duration-500 flex justify-end">
+                                <span class="bg-white/90 backdrop-blur text-slate-800 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">ด้านวิทยากร</span>
+                            </div>
+                            <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                                <h3 class="text-white font-bold text-xl mb-3">ทีมวิทยากรอบรม</h3>
+                                <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-theme-primary text-slate-900 rounded-full font-bold text-sm shadow-xl">
+                                    <i data-feather="zoom-in" class="w-4 h-4"></i> ขยายดูรูปภาพ
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View More Button (Minimalist & Elegant) -->
+            <div class="mt-16 text-center reveal delay-200">
+                <a href="https://drive.google.com/drive/u/0/folders/1SN9aQf_ZfO-53uUW3U5GBw1uLKmoTEQG" target="_blank" class="group inline-flex items-center gap-3 px-8 py-3.5 bg-white border-2 border-slate-200 text-slate-600 rounded-full font-bold text-[15px] hover:border-theme-primary hover:text-slate-900 transition-all shadow-sm hover:shadow-md hover:-translate-y-1">
+                    ดูผลงานเพิ่มเติม 
+                    <i data-feather="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Contact Section (Light Gradient Background) -->
+    <section id="contact" class="pt-32 pb-24 text-center px-4 relative overflow-hidden bg-gradient-contact">
+        <div class="max-w-4xl mx-auto relative z-10 reveal">
+            <h2 class="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-6">Let's make something<br>amazing together</h2>
+            <p class="text-slate-600 text-lg mb-10 max-w-2xl mx-auto font-medium">
+                หากสนใจในผลงาน หรือกำลังมองหาผู้ร่วมทีมที่มีความตั้งใจและพร้อมเรียนรู้สิ่งใหม่ๆ สามารถติดต่อได้ตามช่องทางด้านล่างนี้เลยครับ
+            </p>
+            
+            <a href="mailto:panpaohnb@gmail.com" class="inline-flex items-center gap-3 px-10 py-4 bg-theme-primary text-slate-900 rounded-full font-bold text-lg hover:bg-[#F59E0B] hover:scale-105 transition-all shadow-xl shadow-amber-400/30 mb-12">
+                Get in Touch <i data-feather="arrow-right" class="w-5 h-5"></i>
+            </a>
+
+            <!-- Social Links at the bottom like the reference -->
+            <div class="flex justify-center gap-6 text-slate-400">
+                <a href="#" class="hover:text-theme-primary transition-colors"><i data-feather="facebook" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-theme-primary transition-colors"><i data-feather="instagram" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-theme-primary transition-colors"><i data-feather="twitter" class="w-5 h-5"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#FFF0E6] py-8 text-center text-slate-400 text-sm">
+        <p>&copy; 2024 Panpapohn Buppasiri. All rights reserved.</p>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-slate-900 text-white p-3 rounded-full shadow-lg translate-y-20 opacity-0 transition-all duration-300 hover:bg-slate-800 hover:scale-110 z-50">
+        <i data-feather="chevron-up"></i>
+    </button>
+
+    <!-- Combined Image & Video Lightbox Modal -->
+    <div id="lightbox-modal" class="fixed inset-0 z-[100] hidden bg-slate-900/90 backdrop-blur-sm items-center justify-center p-4 sm:p-8 opacity-0 transition-opacity duration-300">
+        <button id="close-lightbox" class="absolute top-6 right-6 text-white hover:text-amber-400 focus:outline-none transition-transform hover:scale-110 z-50">
+            <i data-feather="x" class="w-10 h-10"></i>
+        </button>
+        <!-- Element สำหรับแสดงรูปภาพ -->
+        <img id="lightbox-img" src="" alt="Full View" class="hidden max-w-full max-h-[90vh] rounded-lg shadow-2xl transform scale-95 transition-transform duration-300 object-contain">
+        <!-- Element สำหรับเปิดวิดีโอ YouTube -->
+        <iframe id="lightbox-video" src="" class="hidden w-full max-w-5xl aspect-video rounded-xl shadow-2xl transform scale-95 transition-transform duration-300" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // 1. Initialize Icons
+        feather.replace();
+
+        // 2. Mobile Menu Logic
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+        menu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => menu.classList.add('hidden'));
+        });
+
+        // 3. Advanced Scroll Features (Progress Bar, Back to Top, Navbar Blur)
+        const progressBar = document.getElementById('progress-bar');
+        const backToTop = document.getElementById('back-to-top');
+        const nav = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            // Progress Bar
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + "%";
+
+            // Navbar shadow & Back to Top
+            if (winScroll > 50) {
+                nav.classList.add('shadow-md', 'bg-white/95');
+                nav.classList.remove('bg-white/80', 'shadow-sm');
+                backToTop.classList.remove('translate-y-20', 'opacity-0');
+            } else {
+                nav.classList.remove('shadow-md', 'bg-white/95');
+                nav.classList.add('bg-white/80', 'shadow-sm');
+                backToTop.classList.add('translate-y-20', 'opacity-0');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // 4. Scroll Reveal Animation
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100; // จุดที่เริ่มแสดงผล
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal(); // Trigger on load
+
+        // 5. Dynamic Project Filtering
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectItems = document.querySelectorAll('.project-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons and add to clicked
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-theme-primary', 'text-slate-900', 'border-transparent');
+                    b.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+                });
+                btn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+                btn.classList.add('bg-theme-primary', 'text-slate-900', 'border-transparent');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                projectItems.forEach(item => {
+                    item.style.opacity = '0';
+                    item.style.transform = 'scale(0.9)';
+                    
+                    setTimeout(() => {
+                        if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                            item.style.display = 'block';
+                            setTimeout(() => {
+                                item.style.opacity = '1';
+                                item.style.transform = 'scale(1)';
+                            }, 50);
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    }, 400); 
+                });
+            });
+        });
+
+        // 6. Lightbox Feature (อัปเกรดให้รองรับทั้งรูปภาพและวิดีโอ)
+        const lightboxModal = document.getElementById('lightbox-modal');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxVideo = document.getElementById('lightbox-video');
+        const closeLightboxBtn = document.getElementById('close-lightbox');
+        const galleryItems = document.querySelectorAll('.project-item');
+
+        galleryItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const videoSrc = this.getAttribute('data-video');
+                const img = this.querySelector('img');
+                
+                lightboxModal.classList.remove('hidden');
+                lightboxModal.classList.add('flex');
+
+                if (videoSrc) {
+                    // ถ้าเป็นวิดีโอ ให้ซ่อนรูปและเปิด iframe
+                    lightboxImg.classList.add('hidden');
+                    lightboxVideo.classList.remove('hidden');
+                    lightboxVideo.src = videoSrc;
+                } else if (img) {
+                    // ถ้าเป็นรูปภาพ ให้ซ่อน iframe และเปิดรูป
+                    lightboxVideo.classList.add('hidden');
+                    lightboxImg.classList.remove('hidden');
+                    lightboxImg.src = img.src;
+                }
+                
+                // แอนิเมชันตอนเปิด
+                setTimeout(() => {
+                    lightboxModal.classList.remove('opacity-0');
+                    if(videoSrc) {
+                        lightboxVideo.classList.remove('scale-95');
+                        lightboxVideo.classList.add('scale-100');
+                    } else {
+                        lightboxImg.classList.remove('scale-95');
+                        lightboxImg.classList.add('scale-100');
+                    }
+                }, 10);
+            });
+        });
+
+        function closeLightbox() {
+            lightboxModal.classList.add('opacity-0');
+            lightboxImg.classList.remove('scale-100');
+            lightboxImg.classList.add('scale-95');
+            lightboxVideo.classList.remove('scale-100');
+            lightboxVideo.classList.add('scale-95');
+            
+            setTimeout(() => {
+                lightboxModal.classList.add('hidden');
+                lightboxModal.classList.remove('flex');
+                lightboxImg.src = '';
+                lightboxVideo.src = ''; // เคลียร์ src เพื่อให้วิดีโอหยุดเล่น
+            }, 300); 
+        }
+
+        closeLightboxBtn.addEventListener('click', closeLightbox);
+        
+        // ปิดเมื่อคลิกที่พื้นหลังสีดำ
+        lightboxModal.addEventListener('click', function(e) {
+            if (e.target === lightboxModal) { 
+                closeLightbox();
+            }
+        });
+        
+        // ปิดเมื่อกดปุ่ม ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !lightboxModal.classList.contains('hidden')) {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+</html>
